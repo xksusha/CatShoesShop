@@ -9,6 +9,12 @@ Every order is identified by the list of order items. Each order item correspond
 
 http://opply-test.herokuapp.com/playground
 
+### Authentication
+
+1. Fill in username and password for api-token-auth endpoint to get USER_TOKEN
+2. Using "Authorize" button at the upper right corner, input the following string:
+```Token USER_TOKEN```
+3. You can then perform the order requests that require user authentication
 
 ## Admin
 
@@ -24,3 +30,5 @@ http://opply-test.herokuapp.com/admin
 - Better test coverage; notably, permissions
 - Better API documentation: payload description and validations, expected responses
 - CI/CD
+
+
