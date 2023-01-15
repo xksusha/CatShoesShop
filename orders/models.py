@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from products.models import Product
 
 User = get_user_model()
@@ -14,7 +16,7 @@ class Order(models.Model):
         ordering = ('-created',)
 
     def price(self):
-        return sum(item.total_price() for item in self.items.all())
+        return sum(item.total_price() for item in self.order_items.all())
 
 
 class OrderItem(models.Model):
@@ -25,3 +27,8 @@ class OrderItem(models.Model):
 
     def total_price(self):
         return self.product.price * self.paws
+
+@receiver(post_save, sender=OrderItem, dispatch_uid="update_product_qty")
+def update_stock(sender, instance, **kwargs):
+    instance.product.quantity -= instance.paws
+    instance.product.save()
