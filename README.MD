@@ -30,5 +30,7 @@ http://opply-test.herokuapp.com/admin
 - Better test coverage; notably, permissions
 - Better API documentation: payload description and validations, expected responses
 - CI/CD
+- Stable DB deployment (currently using ephemere sqlite)
+- Handle exceptions: relationships edge cases (missing product/order id)
 
 

@@ -50,7 +50,7 @@ class ViewOrdersTest(TestCase):
         }
         token = Token.objects.get_or_create(user=User.objects.first())
         client.credentials(HTTP_AUTHORIZATION='Token ' + str(token[0]))
-        request = client.put(reverse('order-detail', kwargs={ 'pk': order.id }), json.dumps(item), format='json')
+        request = client.put(reverse('order-detail', kwargs={ 'pk': order.id }), item, format='json')
         self.assertEqual(request.status_code, status.HTTP_201_CREATED)
         self.assertIn('order_items', request.data)
         order_items = request.data.get('order_items', [])

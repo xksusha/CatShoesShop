@@ -20,7 +20,7 @@ class OrderViews(GenericViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def update(self, request, pk):
-        data = json.loads(request.data)
+        data = request.data
         order = get_object_or_404(self.queryset, pk=pk)
         OrderItem(order=order, **data).save()
         order.refresh_from_db()
