@@ -28,7 +28,9 @@ class OrderItem(models.Model):
     def total_price(self):
         return self.product.price * self.paws
 
+# TechDebt - [callbacks]: callbacks are confusing
 @receiver(post_save, sender=OrderItem, dispatch_uid="update_product_qty")
 def update_stock(sender, instance, **kwargs):
     instance.product.quantity -= instance.paws
     instance.product.save()
+# TechDebt - [callbacks]
