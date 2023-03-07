@@ -8,6 +8,7 @@ const BEGIN_TAG_REGEX = /^[#/ ]+[ ]?<DT>[ -]*(?<tag>\[[\w_\- ]+\])[ -]*(?<descri
 const CLOSING_TAG_REGEX = /^[#/ ]+[ ]?<\/DT>.*$/gmi
 const REMOVE_BRACKES_REGEX = /^\[|\]$/gmi
 
+
 const does_file_exists = async (path) => {
     try {
         await access(path, constants.F_OK)
