@@ -12,11 +12,14 @@ async function main() {
       api.findItemsByFilename(filename).then(data => data.results.forEach(r => {
         return api.deletePage(r.id)
       }))
-      get_debt_comments(filename).then(comments => comments.forEach(comment => {
-        api.insertItem(comment)
-      }))
+      // get_debt_comments(filename).then(comments => comments.forEach(comment => {
+      //   api.insertItem(comment)
+      // }))
       
     })
+    // api.viewPage('89eb10e6040d4446be700212a215de73').then(page => Object.values(page.properties).forEach(b => {
+    //   api.getBlock(b.id).then(b => console.log(b))
+    // }))
 }
 
 main()

@@ -25,13 +25,7 @@ const createPayload = (databaseId, filename, tag, description, snippet, line) =>
           ]
       },
       "line": {
-        "number": [
-            {
-                "text": {
-                    "content": line
-                }
-            }
-        ]
+        "number": line
       },
       "snippet": {
           "rich_text": [
@@ -56,7 +50,7 @@ const createPayload = (databaseId, filename, tag, description, snippet, line) =>
 
 
 module.exports = { NotionAPI: class NotionAPI {
-  constructor(apiToken='secret_AFCZD8PHefoXQT8Gp1UlvRtADXOag5NnIKWQwVE2oZf') {
+  constructor(apiToken='secret_LQYlr7Ns8wdbS4JfQoikJ4FXMLloqkgHZDa8MFrf2Yf') {
     this.notion = new Client({
       auth: apiToken,
     })
@@ -76,6 +70,11 @@ module.exports = { NotionAPI: class NotionAPI {
           contains: filename,
         },
       },
+    })
+  }
+  getBlock(blockId) {
+    return this.notion.blocks.retrieve({
+      block_id: blockId,
     })
   }
   deletePage(pageId) {
