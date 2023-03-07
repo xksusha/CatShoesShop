@@ -9,7 +9,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
         model = OrderItem
         fields = ('id', 'paws',)
 
-
+# <DT> [chore] Should wrap it into a module text
 class OrderSerializer(serializers.ModelSerializer):
 
     order_items = serializers.SerializerMethodField()
@@ -21,4 +21,4 @@ class OrderSerializer(serializers.ModelSerializer):
 
     def get_order_items(self, order):
         return OrderItemSerializer(order.order_items.all(), many=True).data
-
+# </DT>
