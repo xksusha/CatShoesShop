@@ -6,7 +6,7 @@ from products.models import Product
 
 User = get_user_model()
 
-
+# <DT> [chore] Should wrap it into a module
 class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -17,7 +17,7 @@ class Order(models.Model):
 
     def price(self):
         return sum(item.total_price() for item in self.order_items.all())
-
+# </DT>
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='order_items', on_delete=models.CASCADE)
