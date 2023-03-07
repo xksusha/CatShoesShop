@@ -32,7 +32,10 @@ const createPayload = (databaseId, filename, tag, description, snippet, line) =>
             {
                 "text": {
                     "content": snippet
-                }
+                },
+                "annotations": {
+                    "code": true
+                },
             }
           ]
       },
