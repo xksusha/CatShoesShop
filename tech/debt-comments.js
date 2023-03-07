@@ -2,6 +2,9 @@ const { createReadStream } = require('fs')
 const readline = require('readline')
 const { access, constants } = require('fs/promises')
 
+const BEGIN_TAG = /^#[ ]?<DT>[ -]*(?<tag>\[[\w_\- ]+\])[ -]*(?<description>.*)$/gmi
+const CLOSING_TAG = /^#[ ]?<\/DT>.*$/gmi
+
 const does_file_exists = async (path) => {
     try {
         await access(path, constants.F_OK)
@@ -29,8 +32,17 @@ async function* async_read_line(path) {
 }
 
 const get_debt_comment_from_file = async (path) => {
+    let line = 1
+    let sessions = []
+    let current_session = null
+
+    const begin_session = (tags, line) => {
+        return { tags, line, snippet: '', children: [] }
+    }
 
     for await (const line of async_read_line(path)) {
+        console.log(BEGIN_TAG.match(line))
+        line += 1
     }
 
 }
@@ -38,9 +50,9 @@ const get_debt_comment_from_file = async (path) => {
 const get_debt_comments = async (paths) => {
     // for each - call get_comment_from_file
     return [
-        { filename: './products/admin.py', tags: 'error', snippet: "print('tech debt')\nraise Exception('admin')", line: 140 },
-        { filename: './products/apps.py', tags: 'dependency-injection', snippet: "print('apps')\nraise Exception('hello')", line: 150 },
-        { filename: './products/apps.py', tags: 'warning', snippet: "print('apps')\nraise Exception('warning')", line: 198 },
+        { filename: './products/admin.py', tags: 'error', snippet: "print('tech debt')\nraise Exception('admin')", line: 140, description: '' },
+        { filename: './products/apps.py', tags: 'dependency-injection', snippet: "print('apps')\nraise Exception('hello')", line: 150, description: '' },
+        { filename: './products/apps.py', tags: 'warning', snippet: "print('apps')\nraise Exception('warning')", line: 198, description: '' },
     ]
 }
 
