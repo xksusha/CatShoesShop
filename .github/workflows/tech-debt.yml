@@ -8,27 +8,37 @@ jobs:
     steps:
       - uses: actions/checkout@v2.1.0
       - uses: jitterbit/get-changed-files@v1
-        id: abc
+        id: changed_files_spaced
         with:
           format: space-delimited
           token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-      - name: Debug changed files
+      - name: Debug changed files spaced
         run: |
           echo "All:"
-          echo "${{ steps.abc.outputs.all }}"
+          echo "${{ steps.changed_files_spaced.outputs.all }}"
           echo "Added:"
-          echo "${{ steps.abc.outputs.added }}"
+          echo "${{ steps.changed_files_spaced.outputs.added }}"
           echo "Removed:"
-          echo "${{ steps.abc.outputs.removed }}"
+          echo "${{ steps.changed_files_spaced.outputs.removed }}"
           echo "Renamed:"
-          echo "${{ steps.abc.outputs.renamed }}"
+          echo "${{ steps.changed_files_spaced.outputs.renamed }}"
           echo "Modified:"
-          echo "${{ steps.abc.outputs.modified }}"
+          echo "${{ steps.changed_files_spaced.outputs.modified }}"
           echo "Added+Modified:"
-          echo "${{ steps.abc.outputs.added_modified }}"
+          echo "${{ steps.changed_files_spaced.outputs.added_modified }}"
+      - uses: jitterbit/get-changed-files@v1
+        id: changed_files_json
+        with:
+          format: json
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Debug changed files json
+        run: |
+          echo "${{ steps.changed_files_json.outputs.added }}"
+          echo "${{ steps.changed_files_json.outputs.removed }}"
+          echo "${{ steps.changed_files_json.outputs.modified }}"
       - name: Install npm deps
         run: npm install
       - name: Run action
