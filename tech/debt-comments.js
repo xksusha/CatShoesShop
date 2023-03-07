@@ -49,11 +49,11 @@ module.exports = { get_debt_comments }
     //  const get_debt_comments(path)
 
     // TESTING ONLY
-    (async () => {
-        const path = require('path')
-        try {
-            await get_debt_comments(path.join(path.dirname(require.main.filename), 'index.js'))
-        } catch (e) {
-            console.log(e)
-        }
-    })()
+    // (async () => {
+    //     const path = require('path')
+    //     try {
+    //         await get_debt_comments(path.join(path.dirname(require.main.filename), 'index.js'))
+    //     } catch (e) {
+    //         console.log(e)
+    //     }
+    // })()

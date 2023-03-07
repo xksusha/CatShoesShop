@@ -43,9 +43,11 @@ module.exports = { NotionAPI: class NotionAPI {
       auth: apiToken,
     })
   }
-  insertItems() {
-    const payload = createPayload('ee64fcde89b541b5b410ad9974847bbb', 'app.py', 'label', '', 'CODE SNIPPET')
-    return this.notion.pages.create(payload)
+  insertItem(payload) {
+    const notionPayload = createPayload(
+      'ee64fcde89b541b5b410ad9974847bbb', payload.filename, payload.tags, payload.description, payload.snippet
+    )
+    return this.notion.pages.create(notionPayload)
   }
   findItemsByFilename(filename, databaseID='ee64fcde89b541b5b410ad9974847bbb') {
     return this.notion.databases.query({
