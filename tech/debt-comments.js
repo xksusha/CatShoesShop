@@ -4,11 +4,9 @@ const readline = require('readline')
 const { access, constants } = require('fs/promises')
 const { APPLICATION_DIRECTORY, get_files } = require('./detect')
 
-// <DT> [chore] Move this to his own file ?
 const BEGIN_TAG_REGEX = /^[#/ ]+[ ]?<DT>[ -]*(?<tag>\[[\w_\- ]+\])[ -]*(?<description>.*)$/gmi
 const CLOSING_TAG_REGEX = /^[#/ ]+[ ]?<\/DT>.*$/gmi
 const REMOVE_BRACKES_REGEX = /^\[|\]$/gmi
-// </DT>
 
 const does_file_exists = async (path) => {
     try {
