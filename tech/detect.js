@@ -27,11 +27,10 @@ const get_files = async (path, extension) => {
         const {path} = entry;
         files.push(path)
     }
-    
     return files
 }
 
-// TESTING ONLY
-(async () => {
-    await get_files(APPLICATION_DIRECTORY)
-})()
+module.exports = {
+    get_files,
+    APPLICATION_DIRECTORY
+}
