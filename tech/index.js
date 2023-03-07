@@ -10,6 +10,7 @@ console.log(`APPLICATION_DIRECTORY: ${APPLICATION_DIRECTORY}`)
 api = new NotionAPI()
 
 const handleFilesList = (filesList = []) => {
+  console.log('TREATING FILES:', filesList)
   filesList.forEach(filename => {
     api.findItemsByFilename(filename).then(data => data.results.forEach(r => {
       return api.deletePage(r.id)
