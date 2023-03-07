@@ -71,11 +71,11 @@ async function sendNotification(debt_comments) {
     )
 }
 
-sendNotification([
-    { filename: 'tech/debt-comments.js', tags: '', line: 10, description: '', snippet: '' },
-    { filename: 'tech/debt-comments.js', tags: '', line: 15, description: '', snippet: '' },
-    { filename: 'tech/hello.js', tags: '', line: '', description: '', snippet: '' }
-])
+// sendNotification([
+//     { filename: 'tech/debt-comments.js', tags: '', line: 10, description: '', snippet: '' },
+//     { filename: 'tech/debt-comments.js', tags: '', line: 15, description: '', snippet: '' },
+//     { filename: 'tech/hello.js', tags: '', line: '', description: '', snippet: '' }
+// ])
 
 module.exports = {
     sendNotification
