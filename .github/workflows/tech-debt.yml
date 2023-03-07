@@ -1,4 +1,4 @@
-name: Tech-debt
+name: Test
 
 on: push
 
@@ -6,13 +6,16 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Printing
-        uses: actions/checkout@v2.1.0
-        uses: jitterbit/get-changed-files@v1
+      - uses: actions/checkout@v2.1.0
+      - uses: jitterbit/get-changed-files@v1
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
         id: abc
         with:
           format: space-delimited
           token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Debug changed files
         run: |
           echo "All:"
           echo "${{ steps.abc.outputs.all }}"
@@ -26,3 +29,7 @@ jobs:
           echo "${{ steps.abc.outputs.modified }}"
           echo "Added+Modified:"
           echo "${{ steps.abc.outputs.added_modified }}"
+      - name: Install npm deps
+        run: npm install
+      -name: Run action
+        run: node index.js
