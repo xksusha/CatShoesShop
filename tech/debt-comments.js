@@ -81,7 +81,7 @@ module.exports = { get_debt_comments };
 //  const get_debt_comments(path)
 
 // TESTING ONLY
-; (async () => {
-    const files = await get_files(APPLICATION_DIRECTORY)
-    await get_debt_comments(files)
-})()
+// ; (async () => {
+//     const files = await get_files(APPLICATION_DIRECTORY)
+//     await get_debt_comments(files)
+// })()
