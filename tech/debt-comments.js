@@ -20,9 +20,6 @@ const does_file_exists = async (path) => {
 }
 
 async function* async_read_line(path) {
-    if (!await does_file_exists(path))
-        throw Error(`File ${path} not found or not readable`)
-
     const readStream = createReadStream(path, { encoding: 'utf8' })
     const rl = readline.createInterface({
         input: readStream,
@@ -41,6 +38,9 @@ const get_debt_comment_from_file = async (path) => {
     let line_number = 1
     let sessions = []
     let current_sessions = []
+
+    if (!await does_file_exists(path))
+        return []
 
     const begin_session = (tags, line, description) => {
         const new_session = { filename, tags, line, description, snippet: '' }
