@@ -1,6 +1,6 @@
 'use strict';
 const { Client } = require("@notionhq/client")
-const createPayload = (databaseId, filename, tag, description, snippet) => ({
+const createPayload = (databaseId, filename, tag, description, snippet, line) => ({
   "parent": {
       "type": "database_id",
       "database_id": databaseId
@@ -24,6 +24,15 @@ const createPayload = (databaseId, filename, tag, description, snippet) => ({
               }
           ]
       },
+      "line": {
+        "number": [
+            {
+                "text": {
+                    "content": line
+                }
+            }
+        ]
+      },
       "snippet": {
           "rich_text": [
             {
@@ -32,6 +41,15 @@ const createPayload = (databaseId, filename, tag, description, snippet) => ({
                 }
             }
           ]
+      },
+      "description": {
+        "rich_text": [
+          {
+              "text": {
+                  "content": description
+              }
+          }
+        ]
       }
   },
 })
@@ -45,7 +63,7 @@ module.exports = { NotionAPI: class NotionAPI {
   }
   insertItem(payload) {
     const notionPayload = createPayload(
-      'ee64fcde89b541b5b410ad9974847bbb', payload.filename, payload.tags, payload.description, payload.snippet
+      'ee64fcde89b541b5b410ad9974847bbb', payload.filename, payload.tags, payload.description, payload.snippet, payload.line
     )
     return this.notion.pages.create(notionPayload)
   }
