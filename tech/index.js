@@ -8,6 +8,17 @@ console.log(`APPLICATION_DIRECTORY: ${APPLICATION_DIRECTORY}`)
 
 api = new NotionAPI()
 
+const handleFilesList = (filesList = []) => {
+  filesList.forEach(filename => {
+    api.findItemsByFilename(filename).then(data => data.results.forEach(r => {
+      return api.deletePage(r.id)
+    }))
+    get_debt_comments(filename).then(comments => comments.forEach(comment => {
+      api.insertItem(comment)
+    }))
+  })
+}
+
 async function main() {
     added_files_path = process.argv[2]
     console.log(`added_files_path: ${added_files_path}`)
@@ -25,15 +36,8 @@ async function main() {
     console.log(`added_files_list: ${added_files_list}`)
     console.log(`removed_files_list: ${removed_files_list}`)
     console.log(`modified_files_list: ${modified_files_list}`)
+    handleFilesList(modified_files_list)
 
-    (modified_files_list || []).forEach(filename => {
-      api.findItemsByFilename(filename).then(data => data.results.forEach(r => {
-        return api.deletePage(r.id)
-      }))
-      get_debt_comments(filename).then(comments => comments.forEach(comment => {
-        api.insertItem(comment)
-      }))
-    })
 }
 
 main()
