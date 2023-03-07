@@ -1,6 +1,6 @@
 const { NotionAPI } = require('./notionApi.js')
 const { get_files, APPLICATION_DIRECTORY } = require('./detect')
-const { get_debt_comments } = require('./debt-comments')
+const { get_debt_comment_from_file } = require('./debt-comments')
 const { readFile } = require('fs').promises
 const { sendNotification } = require('./notifications')
 
