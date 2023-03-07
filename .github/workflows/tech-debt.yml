@@ -36,9 +36,9 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Debug changed files json
         run: |
-          echo ${{ steps.changed_files_json.outputs.modified }} >> modified_files.json
-          echo ${{ steps.changed_files_json.outputs.added }} >> added_files.json
-          echo ${{ steps.changed_files_json.outputs.removed }} >> removed_files.json
+          echo '${{ steps.changed_files_json.outputs.modified }}' >> modified_files.json
+          echo '${{ steps.changed_files_json.outputs.added }}' >> added_files.json
+          echo '${{ steps.changed_files_json.outputs.removed }}' >> removed_files.json
           cat removed_files.json
           cat added_files.json
           cat modified_files.json
