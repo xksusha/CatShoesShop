@@ -5,8 +5,8 @@ const { access, constants } = require('fs/promises')
 const { APPLICATION_DIRECTORY, get_files } = require('./detect')
 
 // <DT> [chore] Move this to his own file ?
-const BEGIN_TAG_REGEX = /^[#/]{1,2}[ ]?<DT>[ -]*(?<tag>\[[\w_\- ]+\])[ -]*(?<description>.*)$/gmi
-const CLOSING_TAG_REGEX = /^[#/]{1,2}[ ]?<\/DT>.*$/gmi
+const BEGIN_TAG_REGEX = /^[#/ ]+[ ]?<DT>[ -]*(?<tag>\[[\w_\- ]+\])[ -]*(?<description>.*)$/gmi
+const CLOSING_TAG_REGEX = /^[#/ ]+[ ]?<\/DT>.*$/gmi
 const REMOVE_BRACKES_REGEX = /^\[|\]$/gmi
 // </DT>
 
@@ -37,7 +37,6 @@ async function* async_read_line(path) {
 }
 
 const get_debt_comment_from_file = async (path) => {
-    console.log(path)
     const filename = getRelativePath(APPLICATION_DIRECTORY, path);
     let line_number = 1
     let sessions = []
@@ -66,22 +65,19 @@ const get_debt_comment_from_file = async (path) => {
         }
         line_number += 1
     }
+    return sessions
 }
 
 const get_debt_comments = async (paths) => {
-    const results = []
-    for (path of paths) {
-        results += await get_debt_comment_from_file(path)
-    }
-    return results
+    return (await Promise.all(paths.map((path) => get_debt_comment_from_file(path)))).flat(1)
 }
 
-module.exports = { get_debt_comments };
+module.exports = { get_debt_comments, get_debt_comment_from_file }
 
 //  const get_debt_comments(path)
 
 // TESTING ONLY
 // ; (async () => {
 //     const files = await get_files(APPLICATION_DIRECTORY)
-//     await get_debt_comments(files)
+//     console.log(await get_debt_comments(files))
 // })()
