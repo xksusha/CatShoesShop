@@ -15,6 +15,7 @@ const handleFilesList = (filesList = []) => {
       return api.deletePage(r.id)
     }))
     get_debt_comment_from_file(filename).then(comments => comments.forEach(comment => {
+      console.log(comment)
       api.insertItem(comment)
     }))
   })
