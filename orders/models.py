@@ -6,7 +6,7 @@ from products.models import Product
 
 User = get_user_model()
 
-# <DT> [chore] Should wrap it into a module
+# <DT> [chore] Should wrap it into a module text
 class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
