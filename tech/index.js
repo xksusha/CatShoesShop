@@ -1,6 +1,7 @@
 const { NotionAPI } = require('./notionApi.js')
 
 console.log(NotionAPI)
-// api = new NotionAPI()
+api = new NotionAPI()
 
-// api.then(results => console.log(results))
+api.findItemsByFilename('apps.py').then(results => console.log(results))
+api.insertItems(todoList).then(results => console.log(results))
