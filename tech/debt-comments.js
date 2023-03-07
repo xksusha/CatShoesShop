@@ -1,9 +1,14 @@
 const { createReadStream } = require('fs')
+const { relative: getRelativePath } = require('path')
 const readline = require('readline')
 const { access, constants } = require('fs/promises')
+const { APPLICATION_DIRECTORY, get_files } = require('./detect')
 
-const BEGIN_TAG = /^#[ ]?<DT>[ -]*(?<tag>\[[\w_\- ]+\])[ -]*(?<description>.*)$/gmi
-const CLOSING_TAG = /^#[ ]?<\/DT>.*$/gmi
+// <DT> [chore] Move this to his own file ?
+const BEGIN_TAG_REGEX = /^[#/]{1,2}[ ]?<DT>[ -]*(?<tag>\[[\w_\- ]+\])[ -]*(?<description>.*)$/gmi
+const CLOSING_TAG_REGEX = /^[#/]{1,2}[ ]?<\/DT>.*$/gmi
+const REMOVE_BRACKES_REGEX = /^\[|\]$/gmi
+// </DT>
 
 const does_file_exists = async (path) => {
     try {
@@ -32,40 +37,51 @@ async function* async_read_line(path) {
 }
 
 const get_debt_comment_from_file = async (path) => {
-    let line = 1
+    console.log(path)
+    const filename = getRelativePath(APPLICATION_DIRECTORY, path);
+    let line_number = 1
     let sessions = []
-    let current_session = null
+    let current_sessions = []
 
-    const begin_session = (tags, line) => {
-        return { tags, line, snippet: '', children: [] }
+    const begin_session = (tags, line, description) => {
+        const new_session = { filename, tags, line, description, snippet: '' }
+        current_sessions.push(new_session)
+        sessions.push(new_session)
+    }
+
+    const close_session = () => {
+        current_sessions.pop()
     }
 
     for await (const line of async_read_line(path)) {
-        console.log(BEGIN_TAG.match(line))
-        line += 1
+        for (const match of line.matchAll(CLOSING_TAG_REGEX)) {
+            close_session()
+        }
+        for (session of current_sessions) {
+            session.snippet += `${line}\n`
+        }
+        for (const match of line.matchAll(BEGIN_TAG_REGEX)) {
+            tags = (match.groups.tag ?? '').replace(REMOVE_BRACKES_REGEX, '')
+            begin_session(tags, line_number, match.groups.description)
+        }
+        line_number += 1
     }
-
 }
 
 const get_debt_comments = async (paths) => {
-    // for each - call get_comment_from_file
-    return [
-        { filename: './products/admin.py', tags: 'error', snippet: "print('tech debt')\nraise Exception('admin')", line: 140, description: '' },
-        { filename: './products/apps.py', tags: 'dependency-injection', snippet: "print('apps')\nraise Exception('hello')", line: 150, description: '' },
-        { filename: './products/apps.py', tags: 'warning', snippet: "print('apps')\nraise Exception('warning')", line: 198, description: '' },
-    ]
+    const results = []
+    for (path of paths) {
+        results += await get_debt_comment_from_file(path)
+    }
+    return results
 }
 
-module.exports = { get_debt_comments }
+module.exports = { get_debt_comments };
 
-    //  const get_debt_comments(path)
+//  const get_debt_comments(path)
 
-    // TESTING ONLY
-    // (async () => {
-    //     const path = require('path')
-    //     try {
-    //         await get_debt_comments(path.join(path.dirname(require.main.filename), 'index.js'))
-    //     } catch (e) {
-    //         console.log(e)
-    //     }
-    // })()
+// TESTING ONLY
+; (async () => {
+    const files = await get_files(APPLICATION_DIRECTORY)
+    await get_debt_comments(files)
+})()
