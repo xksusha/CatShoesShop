@@ -36,21 +36,9 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Debug changed files json
         run: |
-          echo "modified json ${{ steps.changed_files_json.outputs.modified }}"
-          readarray -t removed_files <<<"$(jq -r '.[]' <<<'${{ steps.changed_files_json.outputs.removed }}')"
-          for removed_file in ${removed_files[@]}; do
-            echo "\"${removed_file}\"" >> removed_files.json
-          done
-          touch added_files.json
-          readarray -t added_files <<<"$(jq -r '.[]' <<<'${{ steps.changed_files_json.outputs.added }}')"
-          for added_file in ${added_files[@]}; do
-            echo "\"${added_file}\"" >> added_files.json
-          done
-          touch modified_files.json
-          readarray -t modified_files <<<"$(jq -r '.[]' <<<'${{ steps.changed_files_json.outputs.modified }}')"
-          for modified_file in ${modified_files[@]}; do
-            echo "\"${modified_file}\"" >> modified_files.json
-          done
+          echo "${{ steps.changed_files_json.outputs.modified }}" >> modified_files.json
+          echo "${{ steps.changed_files_json.outputs.added }}" >> added_files.json
+          echo "${{ steps.changed_files_json.outputs.removed }}" >> removed_files.json
           cat removed_files.json
           cat added_files.json
           cat modified_files.json
