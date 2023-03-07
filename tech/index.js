@@ -2,6 +2,7 @@ const { NotionAPI } = require('./notionApi.js')
 const { get_files, APPLICATION_DIRECTORY } = require('./detect')
 const { get_debt_comments } = require('./debt-comments')
 const { readFile } = require('fs').promises
+const { sendNotification } = require('./notifications')
 
 console.log(`get_files: ${get_files}`)
 console.log(`APPLICATION_DIRECTORY: ${APPLICATION_DIRECTORY}`)
@@ -25,6 +26,9 @@ async function main() {
     console.log(`added_files_list: ${added_files_list}`)
     console.log(`removed_files_list: ${removed_files_list}`)
     console.log(`modified_files_list: ${modified_files_list}`)
+
+    msg = `added_files: ${added_files_list.join(', ')}, removed_files: ${removed_files_list.join(', ')}, modified_files: ${modified_files_list.join(', ')}`
+    sendNotification(msg)
 
     (modified_files_list || []).forEach(filename => {
       api.findItemsByFilename(filename).then(data => data.results.forEach(r => {
