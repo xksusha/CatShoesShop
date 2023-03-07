@@ -1,7 +1,7 @@
 'use strict';
 const { Client } = require("@notionhq/client")
 
-module.exports = class NotionAPI {
+module.exports = {NotionAPI: class NotionAPI {
   constructor(apiToken='secret_AFCZD8PHefoXQT8Gp1UlvRtADXOag5NnIKWQwVE2oZf') {
     this.notion = new Client({
       auth: apiToken,
@@ -18,4 +18,4 @@ module.exports = class NotionAPI {
       },
     })
   }
-}
+}}
