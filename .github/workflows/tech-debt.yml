@@ -36,10 +36,10 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Debug changed files json
         run: |
-          echo "${{ steps.changed_files_json.outputs.added }}"
-          echo "${{ steps.changed_files_json.outputs.removed }}"
-          echo "${{ steps.changed_files_json.outputs.modified }}"
+          echo "${{ steps.changed_files_json.outputs.added }}" > added_files.json
+          echo "${{ steps.changed_files_json.outputs.removed }}" > removed_files.json
+          echo "${{ steps.changed_files_json.outputs.modified }}" > modified_files.json
       - name: Install npm deps
         run: npm install
       - name: Run action
-        run: node tech/index.js
+        run: node tech/index.js added_files.json removed_files.json modified_files.json
