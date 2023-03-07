@@ -23,10 +23,10 @@ const get_payload = (by_files) => {
         for (debt of by_files[file]) {
             msg = [`*Line ${debt.line}*`]
             if (debt.description) {
-                msg += `*Description*: ${debt.description}`
+                msg.push(`*Description*: ${debt.description}`)
             }
             if (debt.description) {
-                msg += `*Tags*: ${debt.tags}`
+                msg.push(`*Tags*: ${debt.tags}`)
             }
             lines.push(msg.join('\n\t'))
         }
@@ -78,7 +78,7 @@ async function sendNotification(debt_comments) {
             SLACK_WEBHOOK_URL, get_payload(by_files)
         )
     } catch (e) {
-        // console.log(e)
+        console.log(e)
     }
 }
 

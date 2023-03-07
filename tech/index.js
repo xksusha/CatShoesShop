@@ -10,33 +10,22 @@ console.log(`APPLICATION_DIRECTORY: ${APPLICATION_DIRECTORY}`)
 api = new NotionAPI()
 
 const handleFilesList = (filesList = []) => {
-<<<<<<< HEAD
-  console.log('TREATING FILES:', filesList)
-  filesList.forEach(filename => {
-    api.findItemsByFilename(filename).then(data => Promise.all((data.results || []).map(r => {
-      return api.deletePage(r.id)
-    }))).then(() => {
-      get_debt_comment_from_file(filename).then(comments => comments.forEach(comment => {
-        console.log(comment)
-        api.insertItem(comment)
-      }))
-    })
-  })
-=======
-    tech_debts = []
-    filesList.forEach(filename => {
-        api.findItemsByFilename(filename).then(data => data.results.forEach(r => {
+    console.log('TREATING FILES:', filesList)
+
+    return Promise.all(filesList.map(filename => {
+        return api.findItemsByFilename(filename).then(data => Promise.all((data.results || []).map(r => {
             return api.deletePage(r.id)
-        }))
-        get_debt_comment_from_file(filename).then(comments => {
-            tech_debts += comments
+        }))).then(() => {
+            return get_debt_comment_from_file(filename)
+        }).then((comments) => {
             comments.forEach(comment => {
                 api.insertItem(comment)
             })
+            return comments
         })
-        sendNotification(tech_debts)
+    })).then((comments) => {
+        return comments.flat(1)
     })
->>>>>>> 81a1622 (wip)
 }
 
 async function main() {
@@ -56,9 +45,12 @@ async function main() {
     console.log(`added_files_list: ${added_files_list}`)
     console.log(`removed_files_list: ${removed_files_list}`)
     console.log(`modified_files_list: ${modified_files_list}`)
-    handleFilesList(modified_files_list)
-    handleFilesList(removed_files_list)
-    handleFilesList(added_files_list)
+    const comments = await Promise.all([
+        handleFilesList(modified_files_list),
+        handleFilesList(removed_files_list),
+        handleFilesList(added_files_list)
+    ])
+    sendNotification(comments.flat(1))
 }
 
 main()
