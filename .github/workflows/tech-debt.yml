@@ -31,5 +31,5 @@ jobs:
           echo "${{ steps.abc.outputs.added_modified }}"
       - name: Install npm deps
         run: npm install
-      -name: Run action
+      - name: Run action
         run: node index.js
