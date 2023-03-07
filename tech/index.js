@@ -12,13 +12,14 @@ api = new NotionAPI()
 const handleFilesList = (filesList = []) => {
   console.log('TREATING FILES:', filesList)
   filesList.forEach(filename => {
-    api.findItemsByFilename(filename).then(data => data.results.forEach(r => {
+    api.findItemsByFilename(filename).then(data => Promise.all(data.results.forEach(r => {
       return api.deletePage(r.id)
-    }))
-    get_debt_comment_from_file(filename).then(comments => comments.forEach(comment => {
-      console.log(comment)
-      api.insertItem(comment)
-    }))
+    }))).then(() => {
+      get_debt_comment_from_file(filename).then(comments => comments.forEach(comment => {
+        console.log(comment)
+        api.insertItem(comment)
+      }))
+    })
   })
 }
 
