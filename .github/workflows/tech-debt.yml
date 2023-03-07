@@ -37,13 +37,16 @@ jobs:
       - name: Debug changed files json
         run: |
           readarray -t removed_files <<<"$(jq -r '.[]' <<<'${{ steps.changed_files_json.outputs.removed }}')"
+          touch removed_files.json
           for removed_file in ${removed_files[@]}; do
             echo "\"${removed_file}\"" >> removed_files.json
           done
+          touch added_files.json
           readarray -t added_files <<<"$(jq -r '.[]' <<<'${{ steps.changed_files_json.outputs.added }}')"
           for added_file in ${added_files[@]}; do
             echo "\"${added_file}\"" >> added_files.json
           done
+          touch modified_files.json
           readarray -t modified_files <<<"$(jq -r '.[]' <<<'${{ steps.changed_files_json.outputs.modified }}')"
           for modified_file in ${modified_files[@]}; do
             echo "\"${modified_file}\"" >> modified_files.json
