@@ -10,7 +10,7 @@ const get_payload = (by_files) => {
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": "Hello, Assistant to the Regional Manager Dwight :douche: ! *Michael Scott* won't be happy with those technical debts."
+                "text": "Hello, Assistant to the Regional Manager Dwight :douchebag: ! *Michael Scott* won't be happy with those technical debts."
             }
         },
         {
@@ -20,8 +20,17 @@ const get_payload = (by_files) => {
 
     for (file in by_files) {
         lines = []
-        for (debt of by_files[file])
-            lines.push(`Line ${debt.line}: ${debt.description} (tags: ${debt.tags})`)
+        for (debt of by_files[file]) {
+            msg = [`*Line ${debt.line}*`]
+            if (debt.description) {
+                msg += `*Description*: ${debt.description}`
+            }
+            if (debt.description) {
+                msg += `*Tags*: ${debt.tags}`
+            }
+            lines.push(msg.join('\n\t'))
+        }
+
         blocks.push({
             "type": "section",
             "text": {
@@ -37,7 +46,7 @@ const get_payload = (by_files) => {
                             "text": ":frame_with_picture: View on Notion",
                             "emoji": true
                         },
-                        "url": NOTION_URL
+                        "url": `${NOTION_URL}`
                     },
                     {
                         "text": {
@@ -45,37 +54,33 @@ const get_payload = (by_files) => {
                             "text": ":page_facing_up: View on GitHub",
                             "emoji": true
                         },
-                        "url": path.join(GITHUB, file)
+                        "url": `${GITHUB}/${file}`
                     }
                 ]
             }
         })
     }
-    console.log(blocks)
     return {
         "blocks": blocks
     }
 }
 
 async function sendNotification(debt_comments) {
-    const SLACK_WEBHOOK_URL = `https://hooks.slack.com/services/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`
+    const SLACK_WEBHOOK_URL = `https://hooks.slack.com/services/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`
     const by_files = {}
     for (comment of debt_comments) {
         by_files[comment.filename] = by_files[comment.filename] || []
         by_files[comment.filename].push(comment)
     }
-    get_payload(by_files)
 
-    await axios.post(
-        SLACK_WEBHOOK_URL, get_payload(by_files)
-    )
+    try {
+        response = await axios.post(
+            SLACK_WEBHOOK_URL, get_payload(by_files)
+        )
+    } catch (e) {
+        // console.log(e)
+    }
 }
-
-// sendNotification([
-//     { filename: 'tech/debt-comments.js', tags: '', line: 10, description: '', snippet: '' },
-//     { filename: 'tech/debt-comments.js', tags: '', line: 15, description: '', snippet: '' },
-//     { filename: 'tech/hello.js', tags: '', line: '', description: '', snippet: '' }
-// ])
 
 module.exports = {
     sendNotification

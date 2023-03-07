@@ -10,6 +10,7 @@ console.log(`APPLICATION_DIRECTORY: ${APPLICATION_DIRECTORY}`)
 api = new NotionAPI()
 
 const handleFilesList = (filesList = []) => {
+<<<<<<< HEAD
   console.log('TREATING FILES:', filesList)
   filesList.forEach(filename => {
     api.findItemsByFilename(filename).then(data => Promise.all((data.results || []).map(r => {
@@ -21,6 +22,21 @@ const handleFilesList = (filesList = []) => {
       }))
     })
   })
+=======
+    tech_debts = []
+    filesList.forEach(filename => {
+        api.findItemsByFilename(filename).then(data => data.results.forEach(r => {
+            return api.deletePage(r.id)
+        }))
+        get_debt_comment_from_file(filename).then(comments => {
+            tech_debts += comments
+            comments.forEach(comment => {
+                api.insertItem(comment)
+            })
+        })
+        sendNotification(tech_debts)
+    })
+>>>>>>> 81a1622 (wip)
 }
 
 async function main() {
