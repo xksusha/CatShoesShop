@@ -32,4 +32,4 @@ jobs:
       - name: Install npm deps
         run: npm install
       - name: Run action
-        run: node index.js
+        run: node .github/workflows/index.js
